@@ -1,4 +1,4 @@
-# BPJS Claim Guard - V1 FINAL (100% Aman & Sistematis)
+# BPJS Claim Guard - V1.1 FINAL (100% Aman & Sistematis)
 # Input: Data klaim (ID anonim, diagnosis, ICD-10, obat, dokumen)
 # Output: Status LAYAK / PERLU PERBAIKAN / DITOLAK + Alasan + Saran
 # DISCLAIMER: Alat bantu cek administrasi, BUKAN keputusan resmi BPJS.
@@ -12,7 +12,7 @@ from datetime import datetime
 class BPJSClaimGuard:
     def __init__(self, config_path="config.json"):
         self.config = self.load_config(config_path)
-        self.atuan_icd = self.config.get("aturan_icd", {})
+        self.aturan_icd = self.config.get("aturan_icd", {})
         self.obat_fornas = set(self.config.get("obat_fornas", []))
         self.dokumen_wajib = self.config.get("dokumen_wajib", [])
 
@@ -36,6 +36,14 @@ class BPJSClaimGuard:
         bersih = re.sub(r'[^A-Za-z0-9-_]', '', str(id_klaim).strip())
         return bersih[:20] if bersih else "KLAIM-000"
 
+    def normalisasi_obat(self, nama_obat):
+        # FIX V1.1: "Paracetamol 500mg" -> "paracetamol" biar tetap ke-detect Fornas
+        # Ambil kata pertama aja, buang dosis & huruf besar
+        if not nama_obat:
+            return ""
+        kata_pertama = str(nama_obat).lower().strip().split()[0] if str(nama_obat).strip() else ""
+        return re.sub(r'[^a-z]', '', kata_pertama)
+
     def cek_klaim(self, id_klaim, diagnosis, kode_icd, daftar_obat, dokumen_ada, simpan=True):
         # Validasi input
         if not diagnosis or not str(diagnosis).strip():
@@ -55,7 +63,7 @@ class BPJSClaimGuard:
         saran = []
 
         # 1. CEK ICD-10 COCOK SAMA DIAGNOSIS?
-        kode_benar = self.atuan_icd.get(diagnosis_bersih)
+        kode_benar = self.aturan_icd.get(diagnosis_bersih)
         if kode_benar:
             if kode_benar != kode_bersih:
                 masalah.append(f"ICD-10 tidak cocok: {diagnosis} harusnya {kode_benar}, bukan {kode_bersih}")
@@ -71,7 +79,10 @@ class BPJSClaimGuard:
             saran.append(f"Lengkapi dokumen: {', '.join(dokumen_kurang)} sebelum submit")
 
         # 3. CEK OBAT FORNAS (di luar Fornas = rawan ditolak)
-        obat_non_fornas = [o for o in obat_list if o and o not in self.obat_fornas]
+        obat_non_fornas = []
+        for o in obat_list:
+            if o and self.normalisasi_obat(o) not in self.obat_fornas:
+                obat_non_fornas.append(o)
         if obat_non_fornas:
             masalah.append(f"Obat di luar Fornas: {', '.join(obat_non_fornas)}")
             saran.append("Cek Fornas / siapkan justifikasi dokter untuk obat non-Fornas")
