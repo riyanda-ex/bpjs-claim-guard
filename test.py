@@ -1,4 +1,4 @@
-# Test otomatis - BPJS Claim Guard
+# Test otomatis - BPJS Claim Guard V1.1
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from main import BPJSClaimGuard
@@ -37,8 +37,11 @@ if __name__ == "__main__":
     hasil.append(test("8. Disclaimer ada", "bukan keputusan resmi" in r1["disclaimer"].lower()))
     # 9. Saran perbaikan ada saat ada masalah
     hasil.append(test("9. Saran perbaikan ada", len(r2["saran_perbaikan"]) >= 1))
-    # 10. Config terload
-    hasil.append(test("10. Config terload", "demam" in g.atuan_icd and len(g.obat_fornas) >= 5))
+    # 10. Config terload - FIX V1.1: aturan_icd
+    hasil.append(test("10. Config terload", "demam" in g.aturan_icd and len(g.obat_fornas) >= 5))
+    # 11. BONUS V1.1: Obat dengan dosis tetap ke-detect Fornas
+    r11 = g.cek_klaim("KLAIM-TEST-11", "demam", "R50.9", ["Paracetamol 500mg"], ["sep", "resume_medis", "kwitansi"], simpan=False)
+    hasil.append(test("11. Obat 'Paracetamol 500mg' tetap Fornas", r11["status"] == "LAYAK KLAIM"))
 
     lulus = sum(hasil)
     print(f"\nHASIL: {lulus}/{len(hasil)} lulus")
