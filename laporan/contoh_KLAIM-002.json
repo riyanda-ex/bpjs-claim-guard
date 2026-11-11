@@ -1,0 +1,21 @@
+{
+  "id_klaim_anonim": "KLAIM-002",
+  "tanggal_cek": "11 November 2026 10:15",
+  "diagnosis": "demam",
+  "kode_icd10_input": "J00",
+  "kode_icd10_benar": "R50.9",
+  "obat": ["paracetamol"],
+  "dokumen_ada": ["sep"],
+  "dokumen_kurang": ["resume_medis", "kwitansi"],
+  "masalah": [
+    "ICD-10 tidak cocok: demam harusnya R50.9, bukan J00",
+    "Dokumen kurang: resume_medis, kwitansi"
+  ],
+  "saran_perbaikan": [
+    "Perbaiki kode ICD-10 jadi R50.9",
+    "Lengkapi dokumen: resume_medis, kwitansi sebelum submit"
+  ],
+  "status": "PERLU PERBAIKAN",
+  "skor_kelayakan": 50,
+  "disclaimer": "Alat bantu cek administrasi, BUKAN keputusan resmi BPJS. Wajib verifikasi manusia."
+}
