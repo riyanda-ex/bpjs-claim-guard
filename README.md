@@ -1,23 +1,28 @@
-# BPJS Claim Guard
+# 🛡️ BPJS Claim Guard
 
-Jangan sampai klaim BPJS klinik kamu ditolak lagi.
+[Python](https://img.shields.io/badge/Python-3.11-blue)
+[Tests](https://github.com/riyanda-ex/bpjs-claim-guard/actions/workflows/test.yml/badge.svg)
+[License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red)
+[Status](https://img.shields.io/badge/Status-Selesai-green)
+[Klinik](https://img.shields.io/badge/Klinik-Al%20Madina%20Husada-teal)
 
-### Masalah
-Klinik di Indonesia kehilangan jutaan rupiah setiap bulan karena klaim BPJS ditolak akibat kesalahan kecil: NIK salah, kode diagnosa kosong, atau data tidak lengkap. Kesalahan baru ketahuan setelah 30 hari.
+Cek kelayakan klaim BPJS otomatis sebelum submit. Cegah klaim ditolak karena ICD-10 salah, dokumen kurang, atau obat di luar Fornas.
 
-### Solusi
-Tool Python ini mengecek file klaim Excel dalam 3 detik SEBELUM dikirim ke BPJS.
-Mendeteksi NIK salah, diagnosa kosong, nama kosong, dan biaya 0.
+Dibuat untuk Klinik Al Madina Husada, Nganjuk.
 
-### Teknologi
-- Python
-- Pandas
-- Regex Validation
+> **Disclaimer:** Alat bantu cek administrasi, BUKAN keputusan resmi BPJS. Keputusan akhir ada di BPJS & verifikator. Wajib verifikasi manusia.
 
-### Cara Pakai
-1. Siapkan file `klaim_bpjs.xlsx` dengan kolom: nik, nama_pasien, kode_diagnosa, biaya
-2. Jalankan `python main.py`
-3. Perbaiki yang ditandai merah, baru kirim ke BPJS.
+## ✨ Fitur
+- Cek ICD-10 cocok dengan diagnosis (25+ aturan)
+- Cek dokumen wajib: SEP, Resume Medis, Kwitansi
+- Cek obat Fornas vs Non-Fornas
+- Skor kelayakan 0-100 + Status: LAYAK / PERLU PERBAIKAN / DITOLAK
+- Saran perbaikan otomatis
+- Simpan laporan JSON ke `laporan/` (ID Anonim)
+- 10 Test Otomatis
 
-### Dampak
-Mencegah kerugian klinik dan mempercepat pencairan dana BPJS.
+## 🚀 Cara Pakai
+```bash
+python main.py
+# atau
+python test.py
