@@ -1,0 +1,15 @@
+{
+  "id_klaim_anonim": "KLAIM-001",
+  "tanggal_cek": "11 November 2026 10:00",
+  "diagnosis": "demam",
+  "kode_icd10_input": "R50.9",
+  "kode_icd10_benar": "R50.9",
+  "obat": ["paracetamol"],
+  "dokumen_ada": ["sep", "resume_medis", "kwitansi"],
+  "dokumen_kurang": [],
+  "masalah": [],
+  "saran_perbaikan": [],
+  "status": "LAYAK KLAIM",
+  "skor_kelayakan": 100,
+  "disclaimer": "Alat bantu cek administrasi, BUKAN keputusan resmi BPJS. Wajib verifikasi manusia."
+}
